@@ -1,16 +1,13 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import HomePage from './HomePage';
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <h1>This is React bitch!</h1>
-    );
-  }
+export default function App(props) {
+  return (
+    <div>
+      <HomePage />
+    </div>
+  );
 }
 
 const appDiv = document.getElementById('app');
