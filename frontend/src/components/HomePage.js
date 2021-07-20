@@ -3,18 +3,58 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 import RoomJoinPage from './RoomJoinPage';
 import CreateRoomPage from './CreateRoomPage';
 import Room from './Room';
+import { Grid, Button, ButtonGroup, Typography } from '@material-ui/core';
 
-export default function HomePage(props) {
-  return (
-    <Router>
-      <Switch>
-        <Route exact path='/'>
-          <p>This is the home page.</p>
-        </Route>
-        <Route path='/join' component={RoomJoinPage} />
-        <Route path='/create' component={CreateRoomPage} />
-        <Route path='/room/:roomCode' component={Room} />
-      </Switch>
-    </Router>
-  )
+export default class HomePage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      roomCode: null,
+    }
+    // method bindings go here
+  }
+
+  // methods go here
+
+  async componentDidMount() {
+    fetch('/api/user-in-room/')
+    .then((response) => response.json())
+    .then((data) => { this.setState({roomCode: data.code, }) });
+  }
+
+  renderHomePage() {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12} align='center'>
+          <Typography variant='h3' component='h3'>
+            HouseParty
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align='center'>
+          <ButtonGroup disableElevation variant='contained' color='primary'>
+            <Button color='primary' to='/join' component={ Link }>Join a Room</Button>
+            <Button color='secondary' to='/create' component={ Link }>Create a Room</Button>
+          </ButtonGroup>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route exact path='/' render={() => {
+            return (
+              this.state.roomCode ? <Redirect to={`/room/${this.state.roomCode}`} /> : this.renderHomePage()
+            )
+          }} />
+          <Route path='/join' component={RoomJoinPage} />
+          <Route path='/create' component={CreateRoomPage} />
+          <Route path='/room/:roomCode' component={Room} />
+        </Switch>
+      </Router>
+    );
+  }
 }
