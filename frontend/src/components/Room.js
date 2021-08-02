@@ -67,8 +67,8 @@ export default class Room extends React.Component {
           <CreateRoomPage update={true}
             votesToSkip={this.state.votesToSkip}
             guestCanPause={this.state.guestCanPause} 
-            roomCode={this.state.roomCode}
-            updateCallback={null}
+            roomCode={this.roomCode}
+            updateCallback={this.getRoomDetails}
           />
         </Grid>
         <Grid item xs={12} align='center'>

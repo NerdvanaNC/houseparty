@@ -117,7 +117,7 @@ class UpdateRoom(APIView):
       votes_to_skip = serializer.data.get('votes_to_skip')
       room_code = serializer.data.get('code')
 
-      room_qs = Room.objects.filter(code=code)
+      room_qs = Room.objects.filter(code=room_code)
       if room_qs.exists():
         room = room_qs[0]
       else:
@@ -131,6 +131,6 @@ class UpdateRoom(APIView):
       room.votes_to_skip = votes_to_skip
       room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
 
-      return Response(RoomSerializer(room.data), status=HTTP_200_OK)
+      return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
     return Response({'Bad Request': 'Invalid Data'}, status=status.HTTP_400_BAD_REQUEST)
